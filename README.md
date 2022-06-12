@@ -25,3 +25,46 @@ $query = (new DSLQuery())->
 ;
 
 ```
+
+
+```json
+{
+    "from": 0,
+    "size": 0,
+    "query": {
+        "bool": {
+            "filter": [
+                {
+                    "bool": {
+                        "must": [
+                            {
+                                "range": {
+                                    "date": {
+                                        "from": "now\/M",
+                                        "include_lower": true
+                                    }
+                                }
+                            },
+                            {
+                                "match_phrase": {
+                                    "event": {
+                                        "query": "click"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    },
+    "aggregations": {
+        "country": {
+            "terms": {
+                "field": "country"
+            }
+        }
+    }
+}
+
+```
