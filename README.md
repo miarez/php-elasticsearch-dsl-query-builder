@@ -1,7 +1,7 @@
 # php-elasticsearch-dsl-query-builder
 
 
-<code>
+<code php>
 
   
 $query = (new DSLQuery())->
