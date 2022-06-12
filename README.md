@@ -1,7 +1,14 @@
 
 # php-elasticsearch-dsl-query-builder
 
-Foobar is a Python library for dealing with word pluralization.
+Lightweight dependency-free elastic search query builder decorator. 
+Aims to help prevent having to dig through a JSON to create a DSL query.
+Paired with the right IDE, the autocomplete functionality of the IDE helps know which operations can be bound to which parts of the query.
+
+## To Do
+- Note: This Library is a work in process, and much of the functionality has not yet been contributed 
+* Nested Aggregation Filters
+
 
 ## Usage
 
