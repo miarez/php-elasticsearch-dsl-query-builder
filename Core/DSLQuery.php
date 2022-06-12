@@ -67,17 +67,27 @@ class DSLQuery {
         }
 
         if(!empty($this->aggregations)){
-            $array["aggregations"] = $this->buildAggregation($this->aggregations);
+
+            $array["aggregations"] = (Object) [];
+            foreach($this->buildAggregation($this->aggregations) as $aggKey=>$aggConfig)
+            {
+                $array["aggregations"]->$aggKey = $aggConfig;
+            }
         }
 
         if(!empty($this->aggregationFunctions))
         {
-            if(!empty($this->aggregations)){
-                throw new LogicException(self::LOGIC_ERROR_AGGREGATION_AGGREGATION_FUNCTION);
+            if(!$array["aggregations"]){
+                $array["aggregations"] = (Object) [];
             }
-            $array["aggregations"] = $this->buildAggregationFunctions(
+            $ans = $this->buildAggregationFunctions(
                 $this->aggregationFunctions
             );
+            foreach($ans as $aggKey=>$aggConfig)
+            {
+                $array["aggregations"]->$aggKey = $aggConfig;
+            }
+
         }
 
         return $array;
@@ -88,10 +98,8 @@ class DSLQuery {
         array $aggregationInputArray
     )
     {
-
         foreach($aggregationInputArray as $aggregation)
         {
-
             if(!empty($aggregation->aggregationFunctions))
             {
                 $aggregationFunctionArray = $this->buildAggregationFunctions($aggregation->aggregationFunctions);
@@ -115,16 +123,45 @@ class DSLQuery {
             $aggregationRow->$alias =  (Object) [];
             $aggregationRow->$alias->$type =  $parameters;
 
-            if($aggregation->aggregations){
+
+            if($aggregation->filter)
+            {
+                $filterAlias = $aggregation->filter->alias ?: "{$aggregation->field}_filter";
+                $filterKey      = "filter";
                 $aggregationKey = "aggregations";
-                $aggregationRow->$alias->$aggregationKey = $this->buildAggregation($aggregation->aggregations);
+                $aggregationRow->$alias->$aggregationKey = (Object) [];
+                $aggregationRow->$alias->$aggregationKey->$filterAlias = (Object) [];
+                $aggregationRow->$alias->$aggregationKey->$filterAlias->$filterKey = $this->buildFilter($aggregation->filter);
+
+                if($aggregation->filter->aggregationFunctions){
+                    $aggregationRow->$alias->$aggregationKey->$filterAlias->$aggregationKey = $this->buildAggregationFunctions($aggregation->filter->aggregationFunctions);
+                }
+
+                if($aggregationFunctionArray){
+                    $ans = $this->buildAggregationFunctions($aggregation->aggregationFunctions);
+
+                    foreach($ans as $key=>$value){
+                        $aggregationRow->$alias->$aggregationKey->$key = $value;
+                    }
+
+                }
 
             } else {
-                if($aggregationFunctionArray){
+
+
+                if($aggregation->aggregations){
                     $aggregationKey = "aggregations";
-                    $aggregationRow->$alias->$aggregationKey = $aggregationFunctionArray;
+                    $aggregationRow->$alias->$aggregationKey = $this->buildAggregation($aggregation->aggregations);
+
+                } else {
+                    if($aggregationFunctionArray){
+                        $aggregationKey = "aggregations";
+                        $aggregationRow->$alias->$aggregationKey = $aggregationFunctionArray;
+                    }
                 }
             }
+
+
         }
 
         return $aggregationRow;
@@ -137,12 +174,9 @@ class DSLQuery {
         DSLFilter $filter
     ) : array
     {
-
-
         $type = strtolower(get_class($filter));
         $conditionals = $this->buildConditionals($filter->conditionals);
 
-        
         if($filter->filter)
         {
             $conditionals[] = $this->buildFilter($filter->filter);
@@ -151,10 +185,7 @@ class DSLQuery {
         $out["bool"] = (Object) [];
         $out["bool"]->$type = $conditionals;
         return $out;
-
     }
-
-
 
 
 

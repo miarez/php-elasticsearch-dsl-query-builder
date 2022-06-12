@@ -12,6 +12,7 @@ class Conditional {
         "includeLower"  => "include_lower",
         "includeUpper"  => "include_upper",
         "termValues"    => "terms",
+        "termValue"     => "term",
         "wildcard"      => "wildcard",
     ];
 

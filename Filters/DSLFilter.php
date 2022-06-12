@@ -5,10 +5,19 @@ class DSLFilter {
 
     public $conditionals;
     public $filter;
+    public $alias;
 
     public function __construct()
     {
         $this->conditionals = [];
+    }
+
+    public function alias(
+        string $alias
+    ) : self
+    {
+        $this->alias = $alias;
+        return $this;
     }
 
 
@@ -28,6 +37,16 @@ class DSLFilter {
         $this->filter = $filter;
         return $this;
     }
+
+
+    public function bindAggregationFunction(
+        AggregationFunction $aggregationFunction
+    ) : self
+    {
+        $this->aggregationFunctions[] = $aggregationFunction;
+        return $this;
+    }
+
 }
 
 

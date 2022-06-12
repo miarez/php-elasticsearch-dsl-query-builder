@@ -14,6 +14,8 @@ abstract class Aggregation {
     public $interval;
     public $offset;
 
+    public $filter;
+
     const METHOD_FIELD_MAPPING = [
         "field"         => "field",
         "order"         => "order",
@@ -89,6 +91,18 @@ abstract class Aggregation {
         $this->aggregations[] = $aggregation;
         return $this;
     }
+
+    public function bindFilter(
+        DSLFilter $filter
+    ) : self
+    {
+        $this->filter = $filter;
+        return $this;
+    }
+
+
+
+
 
 
 }
