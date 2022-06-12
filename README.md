@@ -36,14 +36,6 @@ $query = (new DSLQuery())->
                     "bool": {
                         "must": [
                             {
-                                "range": {
-                                    "date": {
-                                        "from": "now\/M",
-                                        "include_lower": true
-                                    }
-                                }
-                            },
-                            {
                                 "match_phrase": {
                                     "event": {
                                         "query": "click"
@@ -64,7 +56,6 @@ $query = (new DSLQuery())->
         }
     }
 }
-
 ```
 
 Please make sure to update tests as appropriate.
