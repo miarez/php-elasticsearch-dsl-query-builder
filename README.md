@@ -134,6 +134,104 @@ $query = (new DSLQuery())
 ;
 ```
 
+## Aggregations 
+
+### Basic Aggregations
+Supports:
+* Term Aggregation
+* Date Histogram Aggregations
+
+```
+
+$query = (new DSLQuery())
+    ->bindAggregation(
+        (new DateHistogram())
+            ->field("host")
+            ->format(DateHistogram::FORMAT_YMD)
+            ->interval(DateHistogram::INTERVAL_DAY)
+            ->order("desc")
+            ->alias("host")
+    )
+    ->build()
+;
+```
+
+### Aggregation Functions Bound To Aggregations
+
+```php
+$query = (new DSLQuery())
+    ->bindAggregation(
+        (new DateHistogram())
+            ->field("host")
+            ->format(DateHistogram::FORMAT_YMD)
+            ->interval(DateHistogram::INTERVAL_DAY)
+            ->order("desc")
+            ->alias("host")
+            ->bindAggregationFunction(
+                (new Sum())
+                    ->script(new Script("ppc", "/", 100))
+                    ->alias("revenue_in_cents")
+            )
+            ->bindAggregationFunction(
+                (new Count())
+                    ->field("_index")
+                    ->alias("total")
+            )
+    )
+    ->build()
+;
+```
+
+
+### Nested Aggregations
+
+```php
+$query = (new DSLQuery())
+    ->bindAggregation(
+        (new DateHistogram())
+            ->field("host")
+            ->format(DateHistogram::FORMAT_YMD)
+            ->interval(DateHistogram::INTERVAL_DAY)
+            ->order("desc")
+            ->alias("host")
+            ->bindAggregation(
+                (new TermAggregation())
+                    ->field("host")
+            )
+    )
+    ->build()
+;
+```
+
+
+### Filtering Within Aggregations & Bound Aggregation Functions To Filtered Aggregation
+
+```php
+
+$query = (new DSLQuery())
+    ->bindFilter(
+        (new Must())
+            ->alias("only_us")
+            ->bindConditional(
+                (new Term())
+                    ->field("host")
+                    ->termValue("www.website.com")
+            )
+            ->bindAggregationFunction(
+                (new Count())
+                    ->field("_index")
+                    ->alias("only_us_count")
+            )
+            ->bindAggregationFunction(
+                (new Sum())
+                    ->field("ppc")
+                    ->alias("US_ONLY_REVENUE")
+            )
+    )
+    ->build()
+;
+```
+
 
 
 ## License
