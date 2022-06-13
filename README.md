@@ -71,12 +71,12 @@ $query = (new DSLQuery())->
 ## Aggregation Functions 
 
 Supports:
-# Count, Sum, Avg 
-# Basic Scripting (ie. divide by 100)
+* Count, Sum, Avg 
+* Basic Scripting (ie. divide by 100)
 
 Still missing:
-# Advanced Aggregation Functions (stats, extended_stats, etc)
-# Advanced Scripting (toLower, etc) 
+* Advanced Aggregation Functions (stats, extended_stats, etc)
+* Advanced Scripting (toLower, etc) 
 
 ```php
 $query = (new DSLQuery())
