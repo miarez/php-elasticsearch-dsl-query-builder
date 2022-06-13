@@ -68,6 +68,46 @@ $query = (new DSLQuery())->
 }
 ```
 
+## Filtering 
+
+Supports:
+* Multiple Filters
+* Must / Should Filtering 
+* Various Condition Types (Range, MatchPhrase, Terms, Term, Exists, etc)
+
+```php
+$query = (new DSLQuery())
+    ->bindFilter(
+        (new Must())
+            ->bindConditional(
+                (new Range())
+                    ->field("date")
+                    ->from("now/M")
+                    ->includeLower(true)
+            )
+            ->bindConditional(
+                (new MatchPhrase())
+                    ->field("_event")
+                    ->query("click")
+            )
+            ->bindFilter(
+                (new Should())
+                    ->bindConditional(
+                        (new Terms())
+                            ->field("host")
+                            ->termValues(["www.website.com", "ca.website.com"])
+                    )
+                    ->bindConditional(
+                        (new Term())
+                            ->field("user_country")
+                            ->termValue("us")
+                    )
+            )
+    )
+    ->build()
+;
+```
+
 ## Aggregation Functions 
 
 Supports:
