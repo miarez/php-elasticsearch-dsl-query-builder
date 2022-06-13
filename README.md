@@ -15,7 +15,7 @@ Note: This Library is a work in process, and much of the functionality has not y
 
 ## Usage
 
-### Code Example
+### Basic Example
 ```php
 $query = (new DSLQuery())->
     bindFilter(
@@ -68,7 +68,33 @@ $query = (new DSLQuery())->
 }
 ```
 
-Please make sure to update tests as appropriate.
+## Aggregation Functions 
+
+Supports:
+# Count, Sum, Avg 
+# Basic Scripting (ie. divide by 100)
+
+Still missing:
+# Advanced Aggregation Functions (stats, extended_stats, etc)
+# Advanced Scripting (toLower, etc) 
+
+```php
+$query = (new DSLQuery())
+    ->bindAggregationFunction(
+        (new Count())
+            ->field("_index")
+            ->alias("NON_NESTED_AGG_COUNT")
+    )
+    ->bindAggregationFunction(
+        (new Sum())
+            ->script(new Script("ppc", "/", 100))
+            ->alias("revenue_in_cents")
+    )
+    ->build()
+;
+```
+
+
 
 ## License
 The person who associated a work with this deed has dedicated the work to the public domain by waiving all of his or her rights to the work worldwide under copyright law, including all related and neighboring rights, to the extent allowed by law.
