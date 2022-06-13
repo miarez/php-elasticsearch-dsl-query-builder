@@ -141,8 +141,7 @@ Supports:
 * Term Aggregation
 * Date Histogram Aggregations
 
-```
-
+```php
 $query = (new DSLQuery())
     ->bindAggregation(
         (new DateHistogram())
