@@ -2,7 +2,7 @@
 
 
 
-class Should extends DSLFilter {
+class Should extends EsQueryBuilder\DSLFilter {
 
 
 }

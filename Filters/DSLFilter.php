@@ -1,5 +1,6 @@
 <?php
 
+namespace EsQueryBuilder;
 
 class DSLFilter {
 

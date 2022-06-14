@@ -1,6 +1,6 @@
 <?php
 
-
+namespace EsQueryBuilder;
 
 class AggregationFunction {
 

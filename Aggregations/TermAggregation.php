@@ -1,7 +1,7 @@
 <?php
 
 
-class TermAggregation extends Aggregation {
+class TermAggregation extends EsQueryBuilder\Aggregation {
 
     const ES_ALIAS = "terms";
 

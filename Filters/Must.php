@@ -1,8 +1,7 @@
 <?php
 
 
-
-class Must extends DSLFilter {
+class Must extends EsQueryBuilder\DSLFilter {
 
 
 

@@ -1,7 +1,7 @@
 <?php
 
 
-class DateHistogram extends Aggregation {
+class DateHistogram extends EsQueryBuilder\Aggregation {
 
     const ES_ALIAS = "date_histogram";
 

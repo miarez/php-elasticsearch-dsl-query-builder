@@ -1,7 +1,7 @@
 <?php
 
 
-class Wildcard extends Conditional {
+class Wildcard extends EsQueryBuilder\Conditional {
 
     const ES_ALIAS = "wildcard";
 

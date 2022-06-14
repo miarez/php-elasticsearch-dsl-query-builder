@@ -2,7 +2,7 @@
 
 
 
-class Sum extends AggregationFunction implements  Scriptable{
+class Sum extends EsQueryBuilder\AggregationFunction implements  Scriptable{
 
     public function __construct()
     {

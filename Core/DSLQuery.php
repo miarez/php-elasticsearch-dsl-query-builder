@@ -1,5 +1,5 @@
 <?php
-
+namespace EsQueryBuilder;
 
 class DSLQuery {
 

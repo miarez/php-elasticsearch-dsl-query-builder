@@ -1,6 +1,6 @@
 <?php
 
-class Count extends AggregationFunction {
+class Count extends EsQueryBuilder\AggregationFunction {
 
 
     public function __construct()

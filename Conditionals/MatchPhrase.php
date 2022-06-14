@@ -3,7 +3,7 @@
 
 
 
-class MatchPhrase extends Conditional {
+class MatchPhrase extends EsQueryBuilder\Conditional {
 
     const ES_ALIAS = "match_phrase";
 

@@ -1,7 +1,7 @@
 <?php
 
 
-class Terms extends Conditional {
+class Terms extends EsQueryBuilder\Conditional {
 
     const ES_ALIAS = "terms";
 

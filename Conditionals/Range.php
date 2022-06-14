@@ -1,7 +1,7 @@
 <?php
 
 
-class Range extends Conditional {
+class Range extends EsQueryBuilder\Conditional {
 
     const ES_ALIAS = "range";
 

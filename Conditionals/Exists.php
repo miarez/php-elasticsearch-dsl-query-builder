@@ -1,7 +1,7 @@
 <?php
 
 
-class Exist extends Conditional implements FieldException
+class Exist extends EsQueryBuilder\Conditional implements FieldException
 {
 
     const ES_ALIAS = "exists";

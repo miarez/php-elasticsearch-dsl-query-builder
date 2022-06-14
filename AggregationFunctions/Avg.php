@@ -2,7 +2,7 @@
 
 
 
-class Avg extends AggregationFunction implements Scriptable
+class Avg extends EsQueryBuilder\AggregationFunction implements Scriptable
 {
 
     public function __construct()
