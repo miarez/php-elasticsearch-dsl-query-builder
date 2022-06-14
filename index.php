@@ -4,7 +4,7 @@ include "core.php";
 esBuilderAutoLoad(__DIR__);
 
 
-$query = (new DSLQuery())->
+$query = (new EsQueryBuilder\DSLQuery())->
 
     bindFilter(
         (new Must())
