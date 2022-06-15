@@ -8,19 +8,38 @@ class DSLQuery {
 
     private $from;
     private $size;
-    private $includes;
+    private $sources;
     private $filter;
     private $aggregations;
     private $aggregationFunctions;
 
     function __construct()
     {
-        $this->from = 0;
-        $this->size = 0;
-        $this->includes = [];
-        $this->aggregations = [];
+        $this->from                 = 0;
+        $this->size                 = 0;
+        $this->includes             = [];
+        $this->aggregations         = [];
         $this->aggregationFunctions = [];
+        $this->sources              = [];
     }
+
+    public function setFrom(
+        int $from
+    ) : self
+    {
+        $this->from = $from;
+        return $this;
+    }
+
+
+    public function setSize(
+        int $size
+    ) : self
+    {
+        $this->size = $size;
+        return $this;
+    }
+
 
     function bindFilter(
         DSLFilter $filter
@@ -46,13 +65,25 @@ class DSLQuery {
         return $this;
     }
 
+    public function bindReturnSources(
+        array $fieldsToReturn
+    ) : self
+    {
+        $this->sources = $fieldsToReturn;
+        return $this;
+    }
+
 
     public function build()
     {
 
+
         $array = [];
-        $array["from"]  = $this->from;
-        $array["size"]  = $this->size;
+        $array["from"]      = $this->from;
+        $array["size"]      = $this->size;
+        if(!empty($this->sources)){
+            $array["_source"]   = $this->sources;
+        }
 
 
         if(!empty($this->filter))
@@ -71,7 +102,7 @@ class DSLQuery {
             $array["aggregations"] = (Object) [];
             foreach($this->buildAggregation($this->aggregations) as $aggKey=>$aggConfig)
             {
-                $array["aggregations"]->$aggKey = $aggConfig;
+                    $array["aggregations"]->$aggKey = $aggConfig;
             }
         }
 
@@ -89,7 +120,6 @@ class DSLQuery {
             }
 
         }
-
         return $array;
     }
 
@@ -100,12 +130,42 @@ class DSLQuery {
     {
         foreach($aggregationInputArray as $aggregation)
         {
+            $type = (get_class($aggregation)::ES_ALIAS);
+            $alias = $aggregation->alias ?: $aggregation->field;
+
             if(!empty($aggregation->aggregationFunctions))
             {
                 $aggregationFunctionArray = $this->buildAggregationFunctions($aggregation->aggregationFunctions);
             }
 
-            $type = (get_class($aggregation)::ES_ALIAS);
+            if($type == "composite")
+            {
+                $parameters = [];
+                $parameters["size"]      = $aggregation->size;
+                $parameters["sources"] = [];
+                $ans = $this->buildAggregation($aggregation->aggregations);;
+                foreach($ans as $key=>$value){
+                    $parameters["sources"][$key] = $value;
+                }
+
+                $aggregationRow = (Object) [];
+                $aggregationRow->$alias =  (Object) [];
+                $aggregationRow->$alias->$type =  $parameters;
+
+                if($aggregationFunctionArray){
+                    $ans = $this->buildAggregationFunctions($aggregation->aggregationFunctions);
+
+                    foreach($ans as $key=>$value){
+                        $aggregationKey = "aggregations";
+                        $aggregationRow->$alias->$aggregationKey = (Object) [
+                            $key => $value
+                        ];
+                    }
+                }
+                continue;
+            }
+
+
 
             foreach($aggregation as $key=>$value)
             {
@@ -117,7 +177,7 @@ class DSLQuery {
                 }
             }
 
-            $alias = $aggregation->alias ?: $aggregation->field;
+
 
             $aggregationRow = (Object) [];
             $aggregationRow->$alias =  (Object) [];
@@ -152,7 +212,6 @@ class DSLQuery {
                 if($aggregation->aggregations){
                     $aggregationKey = "aggregations";
                     $aggregationRow->$alias->$aggregationKey = $this->buildAggregation($aggregation->aggregations);
-
                 } else {
                     if($aggregationFunctionArray){
                         $aggregationKey = "aggregations";

@@ -11,9 +11,6 @@ abstract class Aggregation {
     public $keyed;
 
     // Date Histogram Fields
-    public $format;
-    public $interval;
-    public $offset;
 
     public $filter;
 
@@ -24,7 +21,7 @@ abstract class Aggregation {
         "keyed"         => "keyed",
         "format"        => "format",
         "interval"      => "interval",
-        "offset"        => "offset",
+        "offset"        => "offset"
     ];
 
     public function __construct()

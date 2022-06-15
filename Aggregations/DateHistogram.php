@@ -14,6 +14,12 @@ class DateHistogram extends EsQueryBuilder\Aggregation {
     const INTERVAL_HOUR      = "1h";
     const INTERVAL_MINUTE    = "1m";
 
+
+    public $format;
+    public $interval;
+    public $offset;
+
+
     public function __construct()
     {
         parent::__construct();
@@ -45,18 +51,3 @@ class DateHistogram extends EsQueryBuilder\Aggregation {
 
 
 }
-
-
-//"aggregations": {
-//    "day": {
-//        "date_histogram": {
-//            "field": "date",
-// 				"format": "yyyy-MM-dd",
-// 				"interval": "1d",
-// 				"offset": 0,
-// 				"order": {
-//                "_key": "asc"
-// 				},
-// 				"keyed": false,
-// 				"min_doc_count": 0
-// 			},
